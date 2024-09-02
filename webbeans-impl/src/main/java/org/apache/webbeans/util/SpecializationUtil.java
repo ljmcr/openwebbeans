@@ -167,34 +167,13 @@ public class SpecializationUtil
         }
     }
 
-    // private void removeAllDisabledClasses(Map<BeanArchiveService.BeanArchiveInformation, Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>>> beanAttributesPerBda,
-    //                                       Set<Class<?>> disabledClasses)
-    // {
-    //     for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
-    //     {
-    //         beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass()));
-    //     }
-    // }
-
     private void removeAllDisabledClasses(Map<BeanArchiveService.BeanArchiveInformation, Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>>> beanAttributesPerBda,
-                                      Set<Class<?>> disabledClasses)
+                                          Set<Class<?>> disabledClasses)
     {
-        System.out.println("removeAllDisabledClasses called with:");
-        System.out.println("beanAttributesPerBda: " + beanAttributesPerBda);
-        System.out.println("disabledClasses: " + disabledClasses);
-        
         for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
         {
-            System.out.println("Processing beanAttributeMap: " + beanAttributeMap);
-            beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> {
-                boolean shouldRemove = disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass());
-                if (shouldRemove) {
-                    System.out.println("Removing disabled class: " + beanAttributesEntry.getKey().getJavaClass());
-                }
-                return shouldRemove;
-            });
+            beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass()));
         }
-        System.out.println("removeAllDisabledClasses completed.");
     }
 
     private Set<AnnotatedType<?>> getAllAnnotatedTypes(
