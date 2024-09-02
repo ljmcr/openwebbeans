@@ -179,11 +179,9 @@ public class SpecializationUtil
     {
         for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
         {
-            // 添加日志信息
             System.out.println("Processing beanAttributeMap: " + beanAttributeMap);
             beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> {
                 boolean shouldRemove = disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass());
-                // 添加日志信息
                 if (shouldRemove) {
                     System.out.println("Removing disabled class: " + beanAttributesEntry.getKey().getJavaClass());
                 }
