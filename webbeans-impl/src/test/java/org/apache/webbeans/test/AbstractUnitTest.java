@@ -186,6 +186,7 @@ public abstract class AbstractUnitTest
         
         for (Class interceptor : interceptors)
         {
+            System.out.println("Adding interceptor: " + interceptor);
             // add it as enabled interceptor class, like it would be listed in beans.xml
             webBeansContext.getInterceptorsManager().addEnabledInterceptorClass(interceptor);
 
@@ -196,6 +197,7 @@ public abstract class AbstractUnitTest
         for (Class decorator : decorators)
         {
             // add it as enabled decorator class, like it would be listed in beans.xml
+            System.out.println("Adding decorator: " + decorator);
             webBeansContext.getDecoratorsManager().addEnabledDecorator(decorator);
 
             // but also add it for scanning

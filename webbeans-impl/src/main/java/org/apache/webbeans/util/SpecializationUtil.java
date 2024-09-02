@@ -161,7 +161,9 @@ public class SpecializationUtil
             }
 
             // and now remove all AnnotatedTypes of those collected disabledClasses
+            System.out.println("Calling removeAllDisabledClasses...");
             removeAllDisabledClasses(beanAttributesPerBda, disabledClasses);
+            System.out.println("Called removeAllDisabledClasses.");
         }
     }
 
@@ -177,6 +179,10 @@ public class SpecializationUtil
     private void removeAllDisabledClasses(Map<BeanArchiveService.BeanArchiveInformation, Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>>> beanAttributesPerBda,
                                       Set<Class<?>> disabledClasses)
     {
+        System.out.println("removeAllDisabledClasses called with:");
+        System.out.println("beanAttributesPerBda: " + beanAttributesPerBda);
+        System.out.println("disabledClasses: " + disabledClasses);
+        
         for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
         {
             System.out.println("Processing beanAttributeMap: " + beanAttributeMap);
@@ -188,6 +194,7 @@ public class SpecializationUtil
                 return shouldRemove;
             });
         }
+        System.out.println("removeAllDisabledClasses completed.");
     }
 
     private Set<AnnotatedType<?>> getAllAnnotatedTypes(
