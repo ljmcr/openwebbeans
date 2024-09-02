@@ -18,11 +18,6 @@
  */
 package org.apache.webbeans.util;
 
-import jakarta.enterprise.inject.Alternative;
-import jakarta.enterprise.inject.Specializes;
-import jakarta.enterprise.inject.Typed;
-import jakarta.enterprise.inject.spi.AnnotatedType;
-import jakarta.enterprise.inject.spi.BeanAttributes;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -36,13 +31,19 @@ import java.util.Set;
 import org.apache.webbeans.config.BeansDeployer;
 import org.apache.webbeans.config.OWBLogConst;
 import org.apache.webbeans.config.WebBeansContext;
+import org.apache.webbeans.exception.InconsistentSpecializationException;
 import org.apache.webbeans.exception.WebBeansConfigurationException;
 import org.apache.webbeans.exception.WebBeansDeploymentException;
-import org.apache.webbeans.exception.InconsistentSpecializationException;
 import org.apache.webbeans.inject.AlternativesManager;
 import org.apache.webbeans.logger.WebBeansLoggerFacade;
 import org.apache.webbeans.spi.BeanArchiveService;
 import org.apache.webbeans.spi.plugins.OpenWebBeansEjbPlugin;
+
+import jakarta.enterprise.inject.Alternative;
+import jakarta.enterprise.inject.Specializes;
+import jakarta.enterprise.inject.Typed;
+import jakarta.enterprise.inject.spi.AnnotatedType;
+import jakarta.enterprise.inject.spi.BeanAttributes;
 
 /**
  * This class contains a few helpers for handling
@@ -164,12 +165,30 @@ public class SpecializationUtil
         }
     }
 
+    // private void removeAllDisabledClasses(Map<BeanArchiveService.BeanArchiveInformation, Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>>> beanAttributesPerBda,
+    //                                       Set<Class<?>> disabledClasses)
+    // {
+    //     for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
+    //     {
+    //         beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass()));
+    //     }
+    // }
+
     private void removeAllDisabledClasses(Map<BeanArchiveService.BeanArchiveInformation, Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>>> beanAttributesPerBda,
-                                          Set<Class<?>> disabledClasses)
+                                      Set<Class<?>> disabledClasses)
     {
         for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
         {
-            beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass()));
+            // 添加日志信息
+            System.out.println("Processing beanAttributeMap: " + beanAttributeMap);
+            beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> {
+                boolean shouldRemove = disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass());
+                // 添加日志信息
+                if (shouldRemove) {
+                    System.out.println("Removing disabled class: " + beanAttributesEntry.getKey().getJavaClass());
+                }
+                return shouldRemove;
+            });
         }
     }
 
