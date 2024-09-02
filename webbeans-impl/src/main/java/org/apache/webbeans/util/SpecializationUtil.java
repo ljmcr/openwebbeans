@@ -167,12 +167,32 @@ public class SpecializationUtil
         }
     }
 
+    // private void removeAllDisabledClasses(Map<BeanArchiveService.BeanArchiveInformation, Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>>> beanAttributesPerBda,
+    //                                       Set<Class<?>> disabledClasses)
+    // {
+    //     for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
+    //     {
+    //         beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass()));
+    //     }
+    // }
+
     private void removeAllDisabledClasses(Map<BeanArchiveService.BeanArchiveInformation, Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>>> beanAttributesPerBda,
-                                          Set<Class<?>> disabledClasses)
+                                      Set<Class<?>> disabledClasses)
     {
         for (Map<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributeMap : beanAttributesPerBda.values())
         {
-            beanAttributeMap.entrySet().removeIf(beanAttributesEntry -> disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass()));
+            Set<AnnotatedType<?>> toRemove = new HashSet<>();
+            for (Map.Entry<AnnotatedType<?>, BeansDeployer.ExtendedBeanAttributes<?>> beanAttributesEntry : beanAttributeMap.entrySet())
+            {
+                if (disabledClasses.contains(beanAttributesEntry.getKey().getJavaClass()))
+                {
+                    toRemove.add(beanAttributesEntry.getKey());
+                }
+            }
+            for (AnnotatedType<?> annotatedType : toRemove)
+            {
+                beanAttributeMap.remove(annotatedType);
+            }
         }
     }
 
